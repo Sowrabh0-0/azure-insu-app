@@ -1,17 +1,11 @@
 import type { LoginInput, RegisterInput } from "@/lib/validation/auth";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
-
 type ApiOptions = RequestInit & {
   path: string;
 };
 
 async function request<T>({ path, headers, ...options }: ApiOptions): Promise<T> {
-  if (!API_BASE_URL) {
-    throw new Error("API base URL is not configured yet.");
-  }
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(path, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +33,7 @@ async function request<T>({ path, headers, ...options }: ApiOptions): Promise<T>
 export const authApi = {
   async register(payload: RegisterInput) {
     return request<{ id: string; email: string }>({
-      path: "/auth/register",
+      path: "/api/auth/register",
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -47,7 +41,7 @@ export const authApi = {
 
   async login(payload: LoginInput) {
     return request<{ accessToken: string }>({
-      path: "/auth/login",
+      path: "/api/auth/login",
       method: "POST",
       body: JSON.stringify(payload),
     });

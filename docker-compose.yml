@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-}
+      AUTH_BACKEND_URL: ${AUTH_BACKEND_URL:-https://hermes-auth-backend.azurewebsites.net}
       NODE_ENV: production
       PORT: 3000
     expose:
