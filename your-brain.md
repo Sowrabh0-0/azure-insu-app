@@ -83,3 +83,14 @@
 - Restarted the frontend Web App.
 - Verified `https://hermes-auth-frontend.azurewebsites.net` returns `200 OK`.
 - Attempted to create backend Web App named `hermes-auth-backend`, but that name is already globally taken and not visible in the current subscription/resource group.
+- Created backend Web App `hermes-auth-backend-demo` after `hermes-auth-backend` remained unavailable.
+- Configured backend main container image as `sowrabh0/hermes-auth-backend-nginx:v1`.
+- Added backend sidecar container:
+  - Name: `backend`
+  - Image: `sowrabh0/hermes-auth-backend:v1`
+  - Target port: `3000`
+- Updated frontend `AUTH_BACKEND_URL` to `https://hermes-auth-backend-demo.azurewebsites.net`.
+- Restarted both frontend and backend App Services.
+- Verified both endpoints return `200 OK`:
+  - `https://hermes-auth-frontend.azurewebsites.net`
+  - `https://hermes-auth-backend-demo.azurewebsites.net`
