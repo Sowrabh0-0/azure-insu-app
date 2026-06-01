@@ -60,3 +60,14 @@
   - Next.js route handlers validate the payload and forward to `${AUTH_BACKEND_URL}/api/v1/auth/register` or `${AUTH_BACKEND_URL}/api/v1/auth/login`.
 - `AUTH_BACKEND_URL` defaults to `https://hermes-auth-backend.azurewebsites.net` and should be set in Azure App Service configuration if the final private DNS name differs.
 - It is okay if `hermes-auth-backend` itself sits behind Nginx; the frontend treats `AUTH_BACKEND_URL` as the backend entrypoint and sends normal HTTP requests through it.
+
+## Docker Build Fix Notes
+- The VM Docker build failed at `RUN npm ci`.
+- Local reproduction showed `package-lock.json` was missing optional peer entries for `@emnapi/runtime` used through the Next/ESLint resolver dependency tree.
+- Added `@emnapi/core` and `@emnapi/runtime` as dev dependencies so `npm ci` can resolve the lockfile consistently in Docker.
+- Verified `npm.cmd run build` still passes locally after the package-lock update.
+- Pushed commit `4d80117 fix docker npm ci lockfile`.
+- SSH attempts to `4.240.95.112` from this environment did not complete:
+  - TCP port 22 was reachable.
+  - OpenSSH timed out during session setup/login.
+  - PuTTY `plink` aborted with a network error.
