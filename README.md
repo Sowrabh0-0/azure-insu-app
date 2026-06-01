@@ -32,14 +32,14 @@ NGINX_PORT=8080
 
 ## Container Run
 
-This project is ready to run behind Nginx using Docker Compose.
+This project is ready to run as a single Next.js container. Azure App Service provides the public reverse proxy for the frontend.
 
 ```bash
 docker compose up --build
 ```
 
-Open `http://localhost:8080`.
+Open `http://localhost:3000`.
 
-For Azure App Service multi-container deployment, the Nginx service is the public entrypoint and proxies traffic to the Next.js `web` service on port `3000`. Configure App Service with port `80` for the Nginx container.
+For Azure App Service container deployment, configure the frontend App Service to use `sowrabh0/hermes-auth-frontend:v1` and set the exposed port to `3000`.
 
 Set `AUTH_BACKEND_URL` in the frontend App Service configuration to the backend App Service or backend Nginx DNS name. If the backend is reachable through private endpoint DNS as `hermes-auth-backend`, use the fully qualified private DNS name your VNet resolves, for example `https://hermes-auth-backend.azurewebsites.net`.

@@ -45,10 +45,8 @@
 ## Containerization Notes
 - Added `Dockerfile` using a multi-stage Next.js standalone build.
 - Updated `next.config.ts` with `output: "standalone"` for smaller container runtime output.
-- Added `docker-compose.yml` with two services:
-  - `web`: Next.js application on port 3000.
-  - `nginx`: reverse proxy entrypoint on `${NGINX_PORT:-8080}` locally.
-- Added `nginx/default.conf` to proxy all requests to the Next app and cache Next static assets.
+- Frontend Nginx was later removed because Azure App Service will proxy directly to the frontend container.
+- `docker-compose.yml` now runs only the `web` service as `sowrabh0/hermes-auth-frontend:v1` on port 3000.
 - Added `.env.example` for deployment/runtime configuration.
 - Added `README.md` with local, environment, container, and Azure App Service notes.
 
