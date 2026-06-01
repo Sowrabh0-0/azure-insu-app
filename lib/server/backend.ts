@@ -1,4 +1,4 @@
-const DEFAULT_BACKEND_URL = "https://hermes-auth-backend.azurewebsites.net";
+const DEFAULT_BACKEND_URL = "https://hermes-auth-backapp.azurewebsites.net";
 
 const AUTH_BACKEND_URL = (
   process.env.AUTH_BACKEND_URL ??

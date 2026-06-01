@@ -22,7 +22,7 @@ Open `http://localhost:3000`.
 Copy `.env.example` to `.env` and set values as needed.
 
 ```bash
-AUTH_BACKEND_URL=https://hermes-auth-backend.azurewebsites.net
+AUTH_BACKEND_URL=https://hermes-auth-backapp.azurewebsites.net
 NODE_ENV=production
 PORT=3000
 NGINX_PORT=8080
@@ -40,6 +40,6 @@ docker compose up --build
 
 Open `http://localhost:3000`.
 
-For Azure App Service container deployment, configure the frontend App Service to use `sowrabh0/hermes-auth-frontend:v1` and set the exposed port to `3000`.
+For Azure App Service container deployment, create/configure the frontend App Service as `hermes-auth-frontapp`, use `sowrabh0/hermes-auth-frontend:v1`, and set the exposed port to `3000`.
 
-Set `AUTH_BACKEND_URL` in the frontend App Service configuration to the backend App Service or backend Nginx DNS name. If the backend is reachable through private endpoint DNS as `hermes-auth-backend`, use the fully qualified private DNS name your VNet resolves, for example `https://hermes-auth-backend.azurewebsites.net`.
+Set `AUTH_BACKEND_URL` in the frontend App Service configuration to the backend App Service or backend Nginx DNS name. If the backend App Service is `hermes-auth-backapp`, use `https://hermes-auth-backapp.azurewebsites.net`.

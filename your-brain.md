@@ -28,8 +28,8 @@
 - App Router pages for `/`, `/register`, and `/login` have been added.
 
 ## Implementation Notes
-- Form submission currently calls `authApi`; because `NEXT_PUBLIC_API_BASE_URL` is not configured, the API layer throws a clear setup error that is shown through toast.
-- This keeps frontend validation and error plumbing real while preserving the backend integration point for later.
+- Form submission calls `authApi`, which posts to local Next.js route handlers under `/api/auth/*`.
+- Next.js server route handlers forward auth requests to `AUTH_BACKEND_URL`, keeping backend connectivity server-side and runtime-configurable.
 
 ## Verification Notes
 - Initial `npm install` through PowerShell failed because script execution is disabled for `npm.ps1`.
@@ -51,13 +51,13 @@
 - Added `README.md` with local, environment, container, and Azure App Service notes.
 
 ## Backend Connectivity Notes
-- The backend is expected to run as a separate Azure App Service named `hermes-auth-backend`.
+- The backend is expected to run as a separate Azure App Service named `hermes-auth-backapp`.
 - Since the backend may be reachable only through a private endpoint/private DNS, browser-side `NEXT_PUBLIC_API_BASE_URL` is not the right primary integration point.
 - Switched the frontend to server-side proxy route handlers:
   - Browser submits to `/api/auth/register` and `/api/auth/login`.
   - Next.js route handlers validate the payload and forward to `${AUTH_BACKEND_URL}/api/auth/register` or `${AUTH_BACKEND_URL}/api/auth/login`.
-- `AUTH_BACKEND_URL` defaults to `https://hermes-auth-backend.azurewebsites.net` and should be set in Azure App Service configuration if the final private DNS name differs.
-- It is okay if `hermes-auth-backend` itself sits behind Nginx; the frontend treats `AUTH_BACKEND_URL` as the backend entrypoint and sends normal HTTP requests through it.
+- `AUTH_BACKEND_URL` defaults to `https://hermes-auth-backapp.azurewebsites.net` and should be set in Azure App Service configuration if the final private DNS name differs.
+- It is okay if `hermes-auth-backapp` itself sits behind Nginx; the frontend treats `AUTH_BACKEND_URL` as the backend entrypoint and sends normal HTTP requests through it.
 - Corrected the backend forwarding paths from `/api/v1/auth/*` to `/api/auth/*` to match the backend route shape.
 
 ## Docker Build Fix Notes
@@ -74,27 +74,18 @@
 ## Azure App Service Notes
 - Created resource group `demo` in `centralindia`.
 - Created Linux App Service plan `hermes-linux-plan` with SKU `B1`.
-- Created frontend Web App `hermes-auth-frontend`.
-- Configured frontend container image as `sowrabh0/hermes-auth-frontend:v1`.
-- Configured frontend settings:
+- Temporary App Services were created for verification and later destroyed.
+- Manual deployment should now use:
+  - Frontend App Service: `hermes-auth-frontapp`
+  - Backend App Service: `hermes-auth-backapp`
+- Frontend settings should include:
   - `WEBSITES_PORT=3000`
   - `PORT=3000`
-  - `AUTH_BACKEND_URL=https://hermes-auth-backend.azurewebsites.net`
+  - `AUTH_BACKEND_URL=https://hermes-auth-backapp.azurewebsites.net`
   - `DOCKER_REGISTRY_SERVER_URL=https://index.docker.io`
-- Restarted the frontend Web App.
-- Verified `https://hermes-auth-frontend.azurewebsites.net` returns `200 OK`.
-- Attempted to create backend Web App named `hermes-auth-backend`, but that name is already globally taken and not visible in the current subscription/resource group.
-- Created backend Web App `hermes-auth-backend-demo` after `hermes-auth-backend` remained unavailable.
-- Configured backend main container image as `sowrabh0/hermes-auth-backend-nginx:v1`.
-- Added backend sidecar container:
-  - Name: `backend`
-  - Image: `sowrabh0/hermes-auth-backend:v1`
-  - Target port: `3000`
-- Updated frontend `AUTH_BACKEND_URL` to `https://hermes-auth-backend-demo.azurewebsites.net`.
-- Restarted both frontend and backend App Services.
-- Verified both endpoints return `200 OK`:
-  - `https://hermes-auth-frontend.azurewebsites.net`
-  - `https://hermes-auth-backend-demo.azurewebsites.net`
-- Later destroyed both App Services:
-  - `hermes-auth-frontend`
-  - `hermes-auth-backend-demo`
+
+## Intended Manual Deployment Names
+- Frontend App Service: `hermes-auth-frontapp`
+- Backend App Service: `hermes-auth-backapp`
+- Frontend image remains `sowrabh0/hermes-auth-frontend:v1`.
+- Frontend runtime setting should be `AUTH_BACKEND_URL=https://hermes-auth-backapp.azurewebsites.net`.
