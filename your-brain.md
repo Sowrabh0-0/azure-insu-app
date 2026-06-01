@@ -69,3 +69,17 @@
   - TCP port 22 was reachable.
   - OpenSSH timed out during session setup/login.
   - PuTTY `plink` aborted with a network error.
+
+## Azure App Service Notes
+- Created resource group `demo` in `centralindia`.
+- Created Linux App Service plan `hermes-linux-plan` with SKU `B1`.
+- Created frontend Web App `hermes-auth-frontend`.
+- Configured frontend container image as `sowrabh0/hermes-auth-frontend:v1`.
+- Configured frontend settings:
+  - `WEBSITES_PORT=3000`
+  - `PORT=3000`
+  - `AUTH_BACKEND_URL=https://hermes-auth-backend.azurewebsites.net`
+  - `DOCKER_REGISTRY_SERVER_URL=https://index.docker.io`
+- Restarted the frontend Web App.
+- Verified `https://hermes-auth-frontend.azurewebsites.net` returns `200 OK`.
+- Attempted to create backend Web App named `hermes-auth-backend`, but that name is already globally taken and not visible in the current subscription/resource group.
