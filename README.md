@@ -28,7 +28,7 @@ PORT=3000
 NGINX_PORT=8080
 ```
 
-`AUTH_BACKEND_URL` is used by Next.js server route handlers. The browser calls `/api/auth/login` and `/api/auth/register` on this frontend, then the frontend container forwards those requests to `/api/v1/auth/login` and `/api/v1/auth/register` on the backend. This keeps private endpoint traffic server-side instead of exposing an internal backend URL to the browser.
+`AUTH_BACKEND_URL` is used by Next.js server route handlers. The browser calls `/api/auth/login` and `/api/auth/register` on this frontend, then the frontend container forwards those requests to `/api/auth/login` and `/api/auth/register` on the backend. This keeps private endpoint traffic server-side instead of exposing an internal backend URL to the browser.
 
 ## Container Run
 

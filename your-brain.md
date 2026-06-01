@@ -55,9 +55,10 @@
 - Since the backend may be reachable only through a private endpoint/private DNS, browser-side `NEXT_PUBLIC_API_BASE_URL` is not the right primary integration point.
 - Switched the frontend to server-side proxy route handlers:
   - Browser submits to `/api/auth/register` and `/api/auth/login`.
-  - Next.js route handlers validate the payload and forward to `${AUTH_BACKEND_URL}/api/v1/auth/register` or `${AUTH_BACKEND_URL}/api/v1/auth/login`.
+  - Next.js route handlers validate the payload and forward to `${AUTH_BACKEND_URL}/api/auth/register` or `${AUTH_BACKEND_URL}/api/auth/login`.
 - `AUTH_BACKEND_URL` defaults to `https://hermes-auth-backend.azurewebsites.net` and should be set in Azure App Service configuration if the final private DNS name differs.
 - It is okay if `hermes-auth-backend` itself sits behind Nginx; the frontend treats `AUTH_BACKEND_URL` as the backend entrypoint and sends normal HTTP requests through it.
+- Corrected the backend forwarding paths from `/api/v1/auth/*` to `/api/auth/*` to match the backend route shape.
 
 ## Docker Build Fix Notes
 - The VM Docker build failed at `RUN npm ci`.
@@ -94,3 +95,6 @@
 - Verified both endpoints return `200 OK`:
   - `https://hermes-auth-frontend.azurewebsites.net`
   - `https://hermes-auth-backend-demo.azurewebsites.net`
+- Later destroyed both App Services:
+  - `hermes-auth-frontend`
+  - `hermes-auth-backend-demo`

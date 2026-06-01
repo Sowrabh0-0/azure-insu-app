@@ -15,6 +15,6 @@ export async function POST(request: Request) {
 
   return postToAuthBackend({
     body: parsed.data,
-    path: "/api/v1/auth/register",
+    path: "/api/auth/register",
   });
 }
